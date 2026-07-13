@@ -1,0 +1,52 @@
+# ── Secrets & local config (THE IMPORTANT ONES) ──────────────
+# Anything with keys, passwords, or connection strings. Never commit these.
+.env
+.env.*
+*.key
+secrets.json
+config.local.py
+
+# ── Python bytecode / cache ──────────────────────────────────
+# Auto-generated when Python runs. No reason to track it.
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ── Virtual environments ─────────────────────────────────────
+# Your installed packages live here. They regenerate from requirements.txt,
+# so you never commit the folder itself.
+venv/
+.venv/
+env/
+ENV/
+
+# ── Distribution / build artifacts ───────────────────────────
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ── Testing / coverage ───────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# ── Jupyter (if you use notebooks) ───────────────────────────
+.ipynb_checkpoints/
+
+# ── Editor / OS cruft ────────────────────────────────────────
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Personal Claude Code config — keep local
+CLAUDE.md
+
+# ── Data / logs (uncomment if your project generates these) ──
+# Keep large/generated data out of git; it bloats the repo.
+# *.log
+# *.csv
+# *.sqlite3
+# data/

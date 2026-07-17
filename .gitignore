@@ -43,6 +43,7 @@ Thumbs.db
 
 # Personal Claude Code config — keep local
 CLAUDE.md
+VISION.md
 
 # ── Data / logs (uncomment if your project generates these) ──
 # Keep large/generated data out of git; it bloats the repo.

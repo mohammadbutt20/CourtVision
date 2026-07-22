@@ -32,16 +32,16 @@ dist/
 htmlcov/
 .tox/
 
-# ── Jupyter (if you use notebooks) ───────────────────────────
-.ipynb_checkpoints/
-
 # ── Editor / OS cruft ────────────────────────────────────────
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
 
-# Personal Claude Code config — keep local
+# ── Notes / Scratch Work ─────────────────────────────────────
+notes/
+
+# Personal Claude Code config
 CLAUDE.md
 VISION.md
 

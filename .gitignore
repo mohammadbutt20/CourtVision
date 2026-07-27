@@ -32,15 +32,19 @@ dist/
 .coverage
 htmlcov/
 .tox/
+courtvision.db
 
 # ── Editor / OS cruft ────────────────────────────────────────
 .vscode/
 .idea/
+.claude/
 .DS_Store
 Thumbs.db
 
 # ── Notes / Scratch Work ─────────────────────────────────────
 notes/
+scratch.py
+/docs
 
 # Personal Claude Code config
 CLAUDE.md

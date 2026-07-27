@@ -2,7 +2,7 @@
 
 Estimates the probability an NBA player goes over a prop line, based on how streaky they actually are. *It won't tell you what to bet — it'll tell you what the numbers say, which is a different thing...* 😉 
 
-## Why it exists
+## Why It exists
 
 Sportsbooks post a line. You get one number to decide against — usually a season average — and that number hides the thing that actually matters.
 
@@ -46,7 +46,17 @@ get_player_id("LeBron James")   # 2544
 ```
 
 > [!CAUTION]
-> `get_player_id` raises `PlayerNotFoundError` or `PlayerAmbiguousError`. Type in `"John Doe"` and it'll say there's no one by that name. Type something like `"Thomas"` and it'll tell you to be more specific; or if you search for players with identical legal names,  which happen to be only a handful of people, it will also raise `PlayerAmbiguousError` *(Ex: There are two Mike James, albiet both are innactive...)*
+> `get_player_id` raises `PlayerNotFoundError` or `PlayerAmbiguousError`. Type in `"John Doe"` and it'll say there's no one by that name. Type something like `"Thomas"` and it'll tell you to be more specific; or if you search for players with identical legal names,  which happen to be only a handful of people, it will also raise `PlayerAmbiguousError` *(Ex: There are two Mike James, albeit both are inactive...)*
+
+Pull a player's real game log for a season — comes back as typed `GameRow` objects, not raw API dicts:
+
+```python
+from nba_data import get_player_games
+
+games = get_player_games(2544, "2025-26")   # LeBron, this season
+games[0].points                             # 18
+games[0].game_date                          # datetime.date(2026, 4, 12)
+```
 
 ## How It Works:
 
@@ -56,20 +66,27 @@ Three methods, same question, different assumptions:
 |---|---|---|---|
 | **Empirical** | Observational proportion. Counts number of past games that cleared the line | Establishing a basis  | Can't make predictions. Works only on past info |
 | **Normal** | Fits a bell curve, reads the CDF (Cumulative Distribution Function) | High-volume stats like points | Assumes symmetry that low stats don't have |
-| **Monte Carlo** | Simulates ``'n'`` games and counts the "hits" | What a formula cannot describe | Currently, samples a normal dist. Innaccurate for the moment |
+| **Monte Carlo** | Simulates ``'n'`` games and counts the "hits" | What a formula cannot describe | Currently, samples a normal dist. Inaccurate for the moment |
 
 
 ## TODO:
 
-🚧 Under Active Development. Pardon Our Dust. 🚧 
+🚧 Under Active Development. Pardon My Dust. 🚧 
 
 - [x] Basic Statistical Methods: Empirical, Normal, & Monte Carlo
-- [x] Player name → NBA ID lookup with error handling
-- [ ] Live game logs via `nba_api`
-- [ ] Local cache so repeat lookups skip the API
+- [x] Player name → NBA ID lookup *(with error handling)*
+- [x] Live game logs via `nba_api` → typed `GameRow` objects
+- [x] SQLite storage for fetched games *(write path)*
+- [ ] Cache-aside: freshness check + read path so repeat lookups skip the API
 - [ ] CLI
-- [ ] Tests and probability plots
+- [ ] MatPlotLib tests / probability plots
+
+<!--  
+- [ ] WEBSERVER / BACKEND (FLASK)
+- [ ] WEB UI (?) 
+- [ ] DEPLOYMENT (VERCEL?)
+-->
 
 ## Author
 
-Built by [@mohammadbutt20](https://github.com/mohammadbutt20) — a project for  understanding the statistics, the data plumbing, and building with quality :)
+Built by [@mohammadbutt20](https://github.com/mohammadbutt20) — a project for understanding the statistics, the data plumbing, and building with quality :)

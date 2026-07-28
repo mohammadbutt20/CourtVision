@@ -77,7 +77,7 @@ Three methods, same question, different assumptions:
 - [x] Player name → NBA ID lookup *(with error handling)*
 - [x] Live game logs via `nba_api` → typed `GameRow` objects
 - [x] SQLite storage for fetched games *(write path)*
-- [ ] Cache-aside: freshness check + read path so repeat lookups skip the API
+- [x] Cache-aside: freshness check + read path so repeat lookups skip the API
 - [ ] CLI
 - [ ] MatPlotLib tests / probability plots
 

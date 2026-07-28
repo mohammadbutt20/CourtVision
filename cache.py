@@ -1,5 +1,6 @@
 import sqlite3
 from models import GameRow
+from datetime import date, datetime
 
 DB_PATH = "courtvision.db"
 
@@ -30,8 +31,34 @@ def create_tables(conn):
             turn_over INTEGER,
             PRIMARY KEY (player_id, game_date)
         )
+
+        
+    """)
+    conn.execute("""
+            CREATE TABLE IF NOT EXISTS fetches (
+                player_id INTEGER PRIMARY KEY,
+                fetched_at TEXT
+            )
     """)
     conn.commit()
+
+
+def save_fetch(conn, player_id: int) -> None:
+    conn.execute(
+        "INSERT OR REPLACE INTO fetches VALUES (?, ?)",
+        (player_id, datetime.now().isoformat()),
+    )
+    conn.commit()
+
+
+def get_fetch(conn, player_id: int) -> datetime | None:
+    row = conn.execute(
+        "SELECT fetched_at FROM fetches WHERE player_id = ?", (player_id,)
+    ).fetchone()
+
+    if row is None:
+        return None
+    return datetime.fromisoformat(row[0])
 
 
 def save_games(conn, games: list[GameRow]) -> None:
@@ -40,3 +67,33 @@ def save_games(conn, games: list[GameRow]) -> None:
         [g.to_row() for g in games],
     )
     conn.commit()
+
+
+def get_games(conn, playerid: int) -> list[GameRow]:
+
+    rows = conn.execute(
+        "SELECT * FROM games WHERE player_id = ?", (playerid,)
+    ).fetchall()
+
+    return [
+        GameRow(
+            row[0],
+            date.fromisoformat(row[1]),
+            row[2],
+            row[3],
+            row[4],
+            row[5],
+            row[6],
+            row[7],
+            row[8],
+            row[9],
+            row[10],
+            row[11],
+            row[12],
+            row[13],
+            row[14],
+            row[15],
+            row[16],
+        )
+        for row in rows
+    ]

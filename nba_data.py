@@ -27,11 +27,10 @@ def get_player_games(player_id: int, season: str) -> list[GameRow]:
     log = playergamelog.PlayerGameLog(player_id=player_id, season=season, timeout=30)
 
     raw = log.get_normalized_dict()["PlayerGameLog"]
+    return [_to_row(player_id, g, season) for g in raw]
 
-    return [_to_row(player_id, g) for g in raw]
 
-
-def _to_row(player_id: int, g: dict) -> GameRow:
+def _to_row(player_id: int, g: dict, season:str) -> GameRow:
     """Convert one raw nba_api dict into our GameRow. The ONLY place that
     knows NBA's column names."""
 
@@ -52,7 +51,7 @@ def _to_row(player_id: int, g: dict) -> GameRow:
         field_goal_three_attempted=g["FG3A"],
         free_throw_made=g["FTM"],
         free_throw_attempted=g["FTA"],
-        turn_over=g["TOV"]
+        turn_over=g["TOV"],
+        season=season
     )
-
 

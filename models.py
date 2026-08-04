@@ -21,6 +21,7 @@ class GameRow:
     free_throw_made: int
     free_throw_attempted: int
     turn_over: int
+    season: str
 
     def to_row(self) -> tuple:
         return (
@@ -41,4 +42,5 @@ class GameRow:
             self.free_throw_made,
             self.free_throw_attempted,
             self.turn_over,
+            self.season
         )

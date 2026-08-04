@@ -2,7 +2,7 @@ import sqlite3
 from models import GameRow
 from datetime import date, datetime
 
-DB_PATH = "courtvision.db"
+DB_PATH = "courtvision.db"  # local disk db for test/dev
 
 
 def get_connection():
@@ -29,31 +29,35 @@ def create_tables(conn):
             free_throw_made INTEGER,
             free_throw_attempted INTEGER,
             turn_over INTEGER,
+            season TEXT,
             PRIMARY KEY (player_id, game_date)
         )
 
         
     """)
     conn.execute("""
-            CREATE TABLE IF NOT EXISTS fetches (
-                player_id INTEGER PRIMARY KEY,
-                fetched_at TEXT
-            )
+        CREATE TABLE IF NOT EXISTS fetches (
+            player_id INTEGER NOT NULL,
+            season TEXT NOT NULL,
+            fetched_at TEXT NOT NULL,
+            PRIMARY KEY (player_id, season)
+        )
     """)
     conn.commit()
 
 
-def save_fetch(conn, player_id: int) -> None:
+def save_fetch(conn, player_id: int, season: str) -> None:
     conn.execute(
-        "INSERT OR REPLACE INTO fetches VALUES (?, ?)",
-        (player_id, datetime.now().isoformat()),
+        "INSERT OR REPLACE INTO fetches (player_id, season, fetched_at) VALUES (?, ?, ?)",
+        (player_id, season, datetime.now().isoformat()),
     )
     conn.commit()
 
 
-def get_fetch(conn, player_id: int) -> datetime | None:
+def get_fetch(conn, player_id: int, season: str) -> datetime | None:
     row = conn.execute(
-        "SELECT fetched_at FROM fetches WHERE player_id = ?", (player_id,)
+        "SELECT fetched_at FROM fetches WHERE player_id = ? AND season = ?",
+        (player_id, season),
     ).fetchone()
 
     if row is None:
@@ -63,16 +67,16 @@ def get_fetch(conn, player_id: int) -> datetime | None:
 
 def save_games(conn, games: list[GameRow]) -> None:
     conn.executemany(
-        "INSERT OR REPLACE INTO games VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+        "INSERT OR REPLACE INTO games VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [g.to_row() for g in games],
     )
     conn.commit()
 
 
-def get_games(conn, playerid: int) -> list[GameRow]:
+def get_games(conn, playerid: int, season: str) -> list[GameRow]:
 
     rows = conn.execute(
-        "SELECT * FROM games WHERE player_id = ?", (playerid,)
+        "SELECT * FROM games WHERE player_id = ? AND season = ?", (playerid, season)
     ).fetchall()
 
     return [
@@ -94,6 +98,7 @@ def get_games(conn, playerid: int) -> list[GameRow]:
             row[14],
             row[15],
             row[16],
+            row[17],
         )
         for row in rows
     ]

@@ -70,7 +70,16 @@ def save_games(conn, games: list[GameRow]) -> None:
         "INSERT OR REPLACE INTO games VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         [g.to_row() for g in games],
     )
-    conn.commit()
+
+
+def delete_games(conn, player_id: int, season: str) -> None:
+    """Delete all cached games for one player-season. Scoped to
+    (player_id, season) so refreshing one season leaves other cached
+    seasons intact."""
+    conn.execute(
+        "DELETE FROM games WHERE player_id = ? AND season = ?",
+        (player_id, season),
+    )
 
 
 def get_games(conn, playerid: int, season: str) -> list[GameRow]:
@@ -102,3 +111,4 @@ def get_games(conn, playerid: int, season: str) -> list[GameRow]:
         )
         for row in rows
     ]
+
